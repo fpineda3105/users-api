@@ -12,6 +12,12 @@ jobs:
       - uses: actions/setup-java@v1
         with:
           java-version: 11
+      - name: Cache Maven packages
+        uses: actions/cache@v1
+        with:
+          path: ~/.m2
+          key: ${{ runner.os }}-m2-${{ hashFiles('**/pom.xml') }}
+          restore-keys: ${{ runner.os }}-m2
       - run: mvn -B package --file pom.xml -DskipTests
       - run: mkdir release && cp target/users-api-*.jar release
       - uses: actions/upload-artifact@v1
@@ -29,6 +35,7 @@ jobs:
           login-server: ${{ secrets.REGISTRY_SERVER }}
           username: ${{ secrets.REGISTRY_USERNAME }}
           password: ${{ secrets.REGISTRY_PASSWORD }}
+      - run: ls
       - run: |
           docker build -t ${{ secrets.REGISTRY_SERVER }}/usersapichallenge:latest .
           docker push ${{ secrets.REGISTRY_SERVER }}/usersapichallenge:latest
