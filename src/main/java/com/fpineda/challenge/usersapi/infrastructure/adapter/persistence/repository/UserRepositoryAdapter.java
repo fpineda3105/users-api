@@ -31,7 +31,7 @@ public class UserRepositoryAdapter implements CreateUserPort, FetchAllUserPort {
 
     @Override
     public List<User> fetchAll() {
-        return userRepository.findAll().stream().map(userEntity -> mapper.toModel(userEntity))
+        return userRepository.findAll().stream().map(mapper::toModel)
                 .collect(Collectors.toList());
     }
 
