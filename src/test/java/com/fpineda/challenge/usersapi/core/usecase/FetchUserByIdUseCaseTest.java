@@ -16,7 +16,7 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 @ExtendWith({SpringExtension.class})
 @Import(DatabaseJpaConfig_.class)
-public class FetchUserByIdUseCaseTest {
+class FetchUserByIdUseCaseTest {
 
     @Autowired
     private DatabaseJpaConfig_ databaseConfig;
