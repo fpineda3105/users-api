@@ -1,5 +1,6 @@
 package com.fpineda.challenge.usersapi.config;
 
+import com.fpineda.challenge.usersapi.infrastructure.adapter.persistence.entity.UserEntity;
 import com.fpineda.challenge.usersapi.infrastructure.adapter.persistence.repository.JpaUserRepository;
 import com.fpineda.challenge.usersapi.infrastructure.adapter.persistence.repository.UserRepositoryAdapter;
 import com.fpineda.challenge.usersapi.utils.TestUtilsFactory;
@@ -27,8 +28,8 @@ public class DatabaseJpaConfig_ {
                 jpaUserRepository.deleteAll();
         }
 
-        public void insertUser() {
-                jpaUserRepository.save(TestUtilsFactory.createUserEntity());
+        public UserEntity persistUserForTesting() {
+                return jpaUserRepository.save(TestUtilsFactory.createUserEntity());
         }
 
 

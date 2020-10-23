@@ -1,6 +1,7 @@
 package com.fpineda.challenge.usersapi.adapter.web;
 
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -11,6 +12,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fpineda.challenge.usersapi.core.command.CreateUserCommand;
 import com.fpineda.challenge.usersapi.core.usecase.CreateUserUseCase;
 import com.fpineda.challenge.usersapi.core.usecase.FetchAllUsersUseCase;
+import com.fpineda.challenge.usersapi.core.usecase.FetchUserByIdUseCase;
 import com.fpineda.challenge.usersapi.infrastructure.adapter.web.controller.UserController;
 import com.fpineda.challenge.usersapi.utils.TestUtilsFactory;
 import org.junit.jupiter.api.BeforeAll;
@@ -24,17 +26,19 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
 import static org.hamcrest.Matchers.hasSize;
+import static org.hamcrest.Matchers.comparesEqualTo;
 
 @WebMvcTest(value = UserController.class)
-public class UserControllerTest {
+class UserControllerTest {
+
+    private static final String BASE_PATH = "/users";
 
     @Configuration
-    @ComponentScan(
-        basePackages = "com.fpineda.challenge.usersapi.infrastructure.adapter.web")
+    @ComponentScan(basePackages = "com.fpineda.challenge.usersapi.infrastructure.adapter.web")
     static class TestConfiguration {
 
     }
-    
+
     @Autowired
     MockMvc mockMvc;
 
@@ -45,6 +49,9 @@ public class UserControllerTest {
 
     @MockBean
     private FetchAllUsersUseCase fetchAllUsersUseCase;
+
+    @MockBean
+    private FetchUserByIdUseCase fetchUserUseCase;
 
     @BeforeAll
     public static void setUp() {
@@ -60,8 +67,9 @@ public class UserControllerTest {
         when(createUserUseCase.create(any(CreateUserCommand.class))).thenReturn(userExpected);
 
         // Execute and Assertions
-        mockMvc.perform(post("/users").contentType(MediaType.APPLICATION_JSON).content(asJsonString(createUserDto)))
-        .andExpect(status().isOk()).andExpect(jsonPath("$.id").value(1));        
+        mockMvc.perform(post(BASE_PATH).contentType(MediaType.APPLICATION_JSON)
+                .content(asJsonString(createUserDto))).andExpect(status().isOk())
+                .andExpect(jsonPath("$.id").value(1));
 
     }
 
@@ -73,11 +81,24 @@ public class UserControllerTest {
         when(fetchAllUsersUseCase.fetchAll()).thenReturn(userList);
 
         // Execution and Assertions
-        mockMvc.perform(get("/users")).andExpect(status().isOk()).andExpect(jsonPath("$", hasSize(1)));
+        mockMvc.perform(get(BASE_PATH)).andExpect(status().isOk())
+                .andExpect(jsonPath("$", hasSize(1)));
 
     }
 
-    
+    @Test
+    void should_Return_UserById_Sucessfully() throws Exception {
+        // Prepare data
+        var user = TestUtilsFactory.createUser();
+
+        when(fetchUserUseCase.fetchById(1L)).thenReturn(user);
+
+        // Execution and assertions
+        mockMvc.perform(get(BASE_PATH + "/" + 1L)).andExpect(status().isOk())
+                .andExpect(jsonPath("$.name", comparesEqualTo(user.getName())));
+    }
+
+
     static String asJsonString(Object obj) {
         try {
             return mapper.writeValueAsString(obj);
@@ -86,5 +107,5 @@ public class UserControllerTest {
         }
     }
 
-    
+
 }

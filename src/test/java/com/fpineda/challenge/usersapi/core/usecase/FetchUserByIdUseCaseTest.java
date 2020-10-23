@@ -1,8 +1,9 @@
 package com.fpineda.challenge.usersapi.core.usecase;
 
-import com.fpineda.challenge.usersapi.api.FetchAllUsersApi;
+import javax.persistence.EntityNotFoundException;
+import com.fpineda.challenge.usersapi.api.FetchUserByIdApi;
 import com.fpineda.challenge.usersapi.config.DatabaseJpaConfig_;
-import com.fpineda.challenge.usersapi.core.port.FetchAllUserPort;
+import com.fpineda.challenge.usersapi.core.port.FetchUserByIdPort;
 import com.fpineda.challenge.usersapi.infrastructure.adapter.persistence.repository.UserRepositoryAdapter;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Assertions;
@@ -15,43 +16,43 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 @ExtendWith({SpringExtension.class})
 @Import(DatabaseJpaConfig_.class)
-class FetchAllUsersTest {
-   
+public class FetchUserByIdUseCaseTest {
+
     @Autowired
     private DatabaseJpaConfig_ databaseConfig;
     
     @Autowired
     private UserRepositoryAdapter userRepositoryAdapter;
 
-    private FetchAllUsersUseCase allUsersUseCase;
+    private FetchUserByIdUseCase fetchUserUseCase;
 
     @BeforeEach
     public void setUp() {
 
-        FetchAllUserPort userPort = userRepositoryAdapter;         
+        FetchUserByIdPort userPort = userRepositoryAdapter;         
 
-        allUsersUseCase = new FetchAllUsersApi(userPort);
+        fetchUserUseCase = new FetchUserByIdApi(userPort);
     }
 
     @Test
-    void shouldNot_Fetch_Users() {
-        // Execution        
-        var result = allUsersUseCase.fetchAll();
-
-        // Assertion
-        Assertions.assertEquals(0, result.size());
-    }
-
-    @Test
-    void should_Fetch_Users_With_Size_1(){
+    void shouldReturn_UserById_Succesfully(){
         // Prepare data
-        databaseConfig.persistUserForTesting();
+        var entity = databaseConfig.persistUserForTesting();
 
-        // Execution        
-        var result = allUsersUseCase.fetchAll();
+        // Execution
+        var result = fetchUserUseCase.fetchById(entity.getId());
 
-        // Assertion
-        Assertions.assertEquals(1, result.size());
+        // Assertions
+        Assertions.assertEquals(entity.getName(), result.getName());
+
+    }
+
+    @Test
+    void should_Throw_EntityNotFoundException(){                
+        // Execution && Assertions
+        Assertions.assertThrows(EntityNotFoundException.class, () -> {
+            fetchUserUseCase.fetchById(1L);
+        });
 
     }
 
@@ -59,4 +60,6 @@ class FetchAllUsersTest {
     public void DeleteAllUsers() {
         databaseConfig.tearDown();
     }
+
+    
 }

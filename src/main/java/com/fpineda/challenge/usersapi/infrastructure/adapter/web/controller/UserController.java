@@ -4,9 +4,11 @@ import java.util.List;
 import com.fpineda.challenge.usersapi.core.model.User;
 import com.fpineda.challenge.usersapi.core.usecase.CreateUserUseCase;
 import com.fpineda.challenge.usersapi.core.usecase.FetchAllUsersUseCase;
+import com.fpineda.challenge.usersapi.core.usecase.FetchUserByIdUseCase;
 import com.fpineda.challenge.usersapi.infrastructure.adapter.web.dto.CreateUserDto;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -23,6 +25,7 @@ public class UserController {
 
     private final CreateUserUseCase createUserUseCase;
     private final FetchAllUsersUseCase fetchAllUsersUseCase;
+    private final FetchUserByIdUseCase fetchUserUseCase;
 
     @ApiOperation("Create an User")
     @PostMapping
@@ -35,5 +38,12 @@ public class UserController {
     public ResponseEntity<List<User>> fetchAllUsers() {
         return ResponseEntity.ok().body(fetchAllUsersUseCase.fetchAll());
     }
+
+    @GetMapping("/{id}")
+    @ApiOperation("Fetch User by Id")
+    public ResponseEntity<User> fetchUserById(@PathVariable("id") long id){
+        return ResponseEntity.ok(fetchUserUseCase.fetchById(id));
+    }
+    
 
 }
