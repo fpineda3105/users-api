@@ -1,9 +1,13 @@
 package com.fpineda.challenge.usersapi.utils;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 import com.fpineda.challenge.usersapi.core.command.CreateUserCommand;
 import com.fpineda.challenge.usersapi.core.model.Address;
 import com.fpineda.challenge.usersapi.core.model.User;
+import com.fpineda.challenge.usersapi.infrastructure.adapter.persistence.entity.UserEntity;
+import com.fpineda.challenge.usersapi.infrastructure.adapter.persistence.repository.UserEntityMapper;
 import com.fpineda.challenge.usersapi.infrastructure.adapter.web.dto.CreateUserDto;
 import com.fpineda.challenge.usersapi.infrastructure.adapter.web.dto.CreateUserDto.AddressDto;
 
@@ -18,6 +22,13 @@ public class TestUtilsFactory {
     public static Address createAddress() {
         return Address.builder().city("Caracas").state("Dtto. Capital").country("Venezuela")
                 .street("Andres Bello").zip("3070").build();
+    }
+
+    public static UserEntity createUserEntity() {
+        var userEntityMapper = new UserEntityMapper();
+
+        return userEntityMapper.toEntity(createUser());
+
     }
 
     public static CreateUserCommand createUserCommand() {
@@ -39,6 +50,13 @@ public class TestUtilsFactory {
         addressDto.setZip("15378");
         addressDto.setStreet("Andres Bello");
         return addressDto;
+    }
+
+    public static List<User> createListUsers() {
+        var user = createUser();
+        var result = new ArrayList<User>();
+        result.add(user);
+        return result;
     }
 
 }

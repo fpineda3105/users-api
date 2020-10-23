@@ -1,10 +1,9 @@
 package com.fpineda.challenge.usersapi.core.usecase;
 
-import com.fpineda.challenge.usersapi.api.CreateUserApi;
+import com.fpineda.challenge.usersapi.api.FetchAllUsersApi;
 import com.fpineda.challenge.usersapi.config.DatabaseJpaConfig_;
-import com.fpineda.challenge.usersapi.core.port.CreateUserPort;
+import com.fpineda.challenge.usersapi.core.port.FetchAllUserPort;
 import com.fpineda.challenge.usersapi.infrastructure.adapter.persistence.repository.UserRepositoryAdapter;
-import com.fpineda.challenge.usersapi.utils.TestUtilsFactory;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -16,37 +15,46 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 @ExtendWith({SpringExtension.class})
 @Import(DatabaseJpaConfig_.class)
-class CreateUserUseCaseTest {
-
+class FetchAllUsersTest {
+   
     @Autowired
     private DatabaseJpaConfig_ databaseConfig;
-
+    
     @Autowired
     private UserRepositoryAdapter userRepositoryAdapter;
 
-    private CreateUserUseCase userUseCase;
+    private FetchAllUsersUseCase allUsersUseCase;
 
     @BeforeEach
     public void setUp() {
 
-        CreateUserPort userPort = userRepositoryAdapter;         
+        FetchAllUserPort userPort = userRepositoryAdapter;         
 
-        userUseCase = new CreateUserApi(userPort);
+        allUsersUseCase = new FetchAllUsersApi(userPort);
     }
 
     @Test
-    void should_CreateUser_Successfully() {        
-        // Prepare Data
-        var command = TestUtilsFactory.createUserCommand();
+    void shouldNot_Fetch_Users() {
+        // Execution        
+        var result = allUsersUseCase.fetchAll();
 
-        // Execution
-        var result = userUseCase.create(command);
+        // Assertion
+        Assertions.assertEquals(0, result.size());
+    }
 
-        // Assertions
-        Assertions.assertEquals(1L, result.getId());
-        Assertions.assertEquals(command.getName(), result.getName());
+    @Test
+    void should_Fetch_Users_With_Size_1(){
+        // Prepare data
+        databaseConfig.insertUser();
+
+        // Execution        
+        var result = allUsersUseCase.fetchAll();
+
+        // Assertion
+        Assertions.assertEquals(1, result.size());
 
     }
+    
 
     @AfterEach
     public void DeleteAllUsers() {
