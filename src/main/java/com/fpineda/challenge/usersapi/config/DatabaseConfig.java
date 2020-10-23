@@ -3,7 +3,6 @@ package com.fpineda.challenge.usersapi.config;
 import javax.persistence.EntityManagerFactory;
 import com.fpineda.challenge.usersapi.infrastructure.adapter.persistence.repository.JpaUserRepository;
 import com.fpineda.challenge.usersapi.infrastructure.adapter.persistence.repository.UserRepositoryAdapter;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.domain.EntityScan;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
