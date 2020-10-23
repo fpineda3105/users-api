@@ -15,7 +15,7 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.AllArgsConstructor;
 
-@Api(tags = {"Users"}, description = "Users API")
+@Api(tags = "Users Rest API")
 @RestController
 @RequestMapping("/users")
 @AllArgsConstructor
