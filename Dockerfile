@@ -3,7 +3,7 @@ RUN mkdir -p /workspace
 WORKDIR /workspace
 COPY pom.xml /workspace
 COPY src /workspace/src
-COPY entrypoint /workspace
+COPY entrypoint.sh /workspace
 RUN mvn -B package --file pom.xml -DskipTests
 
 FROM openjdk:11-slim
