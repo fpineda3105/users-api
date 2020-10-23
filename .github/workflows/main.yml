@@ -31,8 +31,8 @@ jobs:
 
     steps:
       - uses: actions/checkout@v2
-      - name: Login to Azure Container Registry
-        run: ${{ secrets.REGISTRY_PASSWORD }} | docker login ${{ secrets.REGISTRY_SERVER }} --username ${{ secrets.REGISTRY_USERNAME }} --password-stdin        
+      - name: Login to Azure Container Registry        
+        run: docker login ${{ secrets.REGISTRY_SERVER }} -u ${{ secrets.REGISTRY_USERNAME }} -p ${{ secrets.REGISTRY_PASSWORD }} 
       - name: Build Container image
         run: docker build -t ${{ secrets.REGISTRY_SERVER }}/usersapichallenge:latest .
       - name: Publish Docker image

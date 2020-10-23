@@ -8,5 +8,6 @@ RUN mvn -B package --file pom.xml -DskipTests
 
 FROM openjdk:11-slim
 COPY --from=build /workspace/target/users-api-*.jar app.jar
+ADD entrypoint.sh entrypoint.sh
 ENTRYPOINT ["/entrypoint.sh"]
 RUN ["chmod", "+x", "/entrypoint.sh"]
