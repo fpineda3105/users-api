@@ -8,10 +8,12 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
+import springfox.documentation.oas.annotations.EnableOpenApi;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 @SpringBootApplication(scanBasePackages = {"com.fpineda.challenge.usersapi.config"})
+@EnableOpenApi
 public class UsersApiApplication {
 
 	public static void main(String[] args) {

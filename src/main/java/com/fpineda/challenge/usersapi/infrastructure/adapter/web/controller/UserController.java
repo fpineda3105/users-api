@@ -11,8 +11,11 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import lombok.AllArgsConstructor;
 
+@Api(tags = {"Users"}, description = "Users API")
 @RestController
 @RequestMapping("/users")
 @AllArgsConstructor
@@ -21,13 +24,15 @@ public class UserController {
     private final CreateUserUseCase createUserUseCase;
     private final FetchAllUsersUseCase fetchAllUsersUseCase;
 
+    @ApiOperation("Create an User")
     @PostMapping
-    public ResponseEntity<User> name(@RequestBody CreateUserDto request) {    
+    public ResponseEntity<User> createUser(@RequestBody CreateUserDto request) {    
         return ResponseEntity.ok().body(createUserUseCase.create(request.toCommand()));
     }
 
-    @GetMapping()
-    public ResponseEntity<List<User>> users() {
+    @GetMapping
+    @ApiOperation("Fetch all Users")
+    public ResponseEntity<List<User>> fetchAllUsers() {
         return ResponseEntity.ok().body(fetchAllUsersUseCase.fetchAll());
     }
 
