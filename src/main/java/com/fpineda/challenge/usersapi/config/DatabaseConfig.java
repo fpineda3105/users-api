@@ -19,12 +19,14 @@ import org.springframework.transaction.PlatformTransactionManager;
     basePackages = "com.fpineda.challenge.usersapi.infrastructure.adapter.persistence.repository")
 public class DatabaseConfig {
 
-  @Autowired
   private ApplicationContext applicationContext;
+
+  public DatabaseConfig(ApplicationContext applicationContext) {
+      this.applicationContext = applicationContext;
+  }
 
   @Bean
   public PlatformTransactionManager transactionManager(EntityManagerFactory entityManagerFactory) {
-
     JpaTransactionManager txManager = new JpaTransactionManager();
     txManager.setEntityManagerFactory(entityManagerFactory);
     return txManager;
@@ -32,8 +34,8 @@ public class DatabaseConfig {
 
   @Bean
   public UserRepositoryAdapter userRepositoryAdapter() {
-      JpaUserRepository jpaUserRepository = applicationContext.getBean(JpaUserRepository.class);
-      return new UserRepositoryAdapter(jpaUserRepository);
+    JpaUserRepository jpaUserRepository = applicationContext.getBean(JpaUserRepository.class);
+    return new UserRepositoryAdapter(jpaUserRepository);
   }
 
 }
