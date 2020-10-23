@@ -2,13 +2,15 @@ package com.fpineda.challenge.usersapi.infrastructure.adapter.persistence.reposi
 
 import java.util.List;
 import java.util.stream.Collectors;
+import javax.persistence.EntityNotFoundException;
 import com.fpineda.challenge.usersapi.core.command.CreateUserCommand;
 import com.fpineda.challenge.usersapi.core.model.User;
 import com.fpineda.challenge.usersapi.core.port.CreateUserPort;
 import com.fpineda.challenge.usersapi.core.port.FetchAllUserPort;
+import com.fpineda.challenge.usersapi.core.port.FetchUserByIdPort;
 import com.fpineda.challenge.usersapi.infrastructure.adapter.persistence.entity.UserEntity;
 
-public class UserRepositoryAdapter implements CreateUserPort, FetchAllUserPort {
+public class UserRepositoryAdapter implements CreateUserPort, FetchAllUserPort, FetchUserByIdPort {
 
     private final JpaUserRepository userRepository;
 
@@ -33,6 +35,15 @@ public class UserRepositoryAdapter implements CreateUserPort, FetchAllUserPort {
     public List<User> fetchAll() {
         return userRepository.findAll().stream().map(mapper::toModel)
                 .collect(Collectors.toList());
+    }
+
+    @Override
+    public User fetchById(long id) {        
+        var result = userRepository.findById(id);
+        if (result.isPresent()){
+            return mapper.toModel(result.get()) ;
+        }
+        throw new EntityNotFoundException();
     }
 
 }

@@ -2,8 +2,10 @@ package com.fpineda.challenge.usersapi.config;
 
 import com.fpineda.challenge.usersapi.api.CreateUserApi;
 import com.fpineda.challenge.usersapi.api.FetchAllUsersApi;
+import com.fpineda.challenge.usersapi.api.FetchUserByIdApi;
 import com.fpineda.challenge.usersapi.core.usecase.CreateUserUseCase;
 import com.fpineda.challenge.usersapi.core.usecase.FetchAllUsersUseCase;
+import com.fpineda.challenge.usersapi.core.usecase.FetchUserByIdUseCase;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
@@ -31,6 +33,11 @@ public class AppConfig {
     @Bean
     public FetchAllUsersUseCase fetchAllUsersUseCase() {
         return new FetchAllUsersApi(databaseConfig.userRepositoryAdapter());
+    }
+
+    @Bean
+    public FetchUserByIdUseCase fetchUserByIdUseCase() {
+        return new FetchUserByIdApi(databaseConfig.userRepositoryAdapter());
     }
 
     @Bean
