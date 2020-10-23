@@ -16,6 +16,9 @@
 	<properties>
 		<java.version>11</java.version>
 		<jacoco-maven-plugin.version>0.8.2</jacoco-maven-plugin.version>
+		<sonar.projectKey>fpineda3105_users-api</sonar.projectKey>
+		<sonar.organization>fpineda3105</sonar.organization>
+		<sonar.host.url>https://sonarcloud.io</sonar.host.url>
 	</properties>
 
 	<dependencies>
@@ -44,7 +47,7 @@
 			<groupId>com.h2database</groupId>
 			<artifactId>h2</artifactId>
 			<scope>runtime</scope>
-		</dependency>		
+		</dependency>
 		<dependency>
 			<groupId>org.projectlombok</groupId>
 			<artifactId>lombok</artifactId>
@@ -68,7 +71,7 @@
 			<plugin>
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
-			</plugin>			
+			</plugin>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-compiler-plugin</artifactId>
@@ -77,11 +80,11 @@
 					<release>${java.version}</release>
 				</configuration>
 			</plugin>
-			
+
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-surefire-plugin</artifactId>
-				<version>3.0.0-M3</version><!--$NO-MVN-MAN-VER$ -->
+				<version>3.0.0-M3</version> <!--$NO-MVN-MAN-VER$ -->
 			</plugin>
 
 			<plugin>
@@ -92,8 +95,8 @@
 					<execution>
 						<id>prepare-agent</id>
 						<goals>
-							<goal>prepare-agent</goal>							
-							<goal>report</goal>													
+							<goal>prepare-agent</goal>
+							<goal>report</goal>
 						</goals>
 					</execution>
 				</executions>
@@ -114,7 +117,7 @@
 						</rule>
 					</rules>
 				</configuration>
-			</plugin>					
+			</plugin>
 		</plugins>
 	</build>
 

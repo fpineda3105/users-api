@@ -3,12 +3,14 @@ package com.fpineda.challenge.usersapi.adapter.web;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fpineda.challenge.usersapi.core.command.CreateUserCommand;
 import com.fpineda.challenge.usersapi.core.usecase.CreateUserUseCase;
+import com.fpineda.challenge.usersapi.core.usecase.FetchAllUsersUseCase;
 import com.fpineda.challenge.usersapi.infrastructure.adapter.web.controller.UserController;
 import com.fpineda.challenge.usersapi.utils.TestUtilsFactory;
 import org.junit.jupiter.api.BeforeAll;
@@ -20,6 +22,8 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
+
+import static org.hamcrest.Matchers.hasSize;
 
 @WebMvcTest(value = UserController.class)
 public class UserControllerTest {
@@ -39,6 +43,9 @@ public class UserControllerTest {
     @MockBean
     private CreateUserUseCase createUserUseCase;
 
+    @MockBean
+    private FetchAllUsersUseCase fetchAllUsersUseCase;
+
     @BeforeAll
     public static void setUp() {
         mapper = new ObjectMapper();
@@ -54,8 +61,19 @@ public class UserControllerTest {
 
         // Execute and Assertions
         mockMvc.perform(post("/users").contentType(MediaType.APPLICATION_JSON).content(asJsonString(createUserDto)))
-        .andExpect(status().isOk()).andExpect(jsonPath("$.id").value(1));
-        
+        .andExpect(status().isOk()).andExpect(jsonPath("$.id").value(1));        
+
+    }
+
+    @Test
+    void should_Return_List_With_OneUser() throws Exception {
+        // Prepare data
+        var userList = TestUtilsFactory.createListUsers();
+
+        when(fetchAllUsersUseCase.fetchAll()).thenReturn(userList);
+
+        // Execution and Assertions
+        mockMvc.perform(get("/users")).andExpect(status().isOk()).andExpect(jsonPath("$", hasSize(1)));
 
     }
 

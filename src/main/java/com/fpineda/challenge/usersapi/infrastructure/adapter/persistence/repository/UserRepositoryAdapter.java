@@ -1,11 +1,14 @@
 package com.fpineda.challenge.usersapi.infrastructure.adapter.persistence.repository;
 
+import java.util.List;
+import java.util.stream.Collectors;
 import com.fpineda.challenge.usersapi.core.command.CreateUserCommand;
 import com.fpineda.challenge.usersapi.core.model.User;
 import com.fpineda.challenge.usersapi.core.port.CreateUserPort;
+import com.fpineda.challenge.usersapi.core.port.FetchAllUserPort;
 import com.fpineda.challenge.usersapi.infrastructure.adapter.persistence.entity.UserEntity;
 
-public class UserRepositoryAdapter implements CreateUserPort {
+public class UserRepositoryAdapter implements CreateUserPort, FetchAllUserPort {
 
     private final JpaUserRepository userRepository;
 
@@ -17,13 +20,19 @@ public class UserRepositoryAdapter implements CreateUserPort {
     }
 
     @Override
-    public User create(final CreateUserCommand command) {        
+    public User create(final CreateUserCommand command) {
 
         var userEntity = mapper.toEntity(command.toUser());
-        
+
         var userEntityResult = userRepository.save(userEntity);
         return mapper.toModel(userEntityResult);
-        
+
+    }
+
+    @Override
+    public List<User> fetchAll() {
+        return userRepository.findAll().stream().map(userEntity -> mapper.toModel(userEntity))
+                .collect(Collectors.toList());
     }
 
 }
