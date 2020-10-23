@@ -43,7 +43,7 @@ class CreateUserUseCaseTest {
         var result = userUseCase.create(command);
 
         // Assertions
-        Assertions.assertEquals(1L, result.getId());
+        Assertions.assertTrue(result.getId() > 0);
         Assertions.assertEquals(command.getName(), result.getName());
 
     }
