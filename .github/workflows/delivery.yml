@@ -32,6 +32,6 @@ jobs:
             login-server: usersapichallenge.azurecr.io
             username: ${{ secrets.REGISTRY_USERNAME }}
             password: ${{ secrets.REGISTRY_PASSWORD }}
-        - run: |
+        - run:
             docker build .t usersapichallenge.azurecr.io/usersapichallenge:latest
             docker push contoso.azurecr.io/nodejssampleapp:latest
