@@ -4,7 +4,7 @@ on:
     branches:
       - main  
 jobs:
-  build_and_release_:
+  build_and_release:
     name: Build and release
     runs-on: ubuntu-latest
     steps:
@@ -20,10 +20,10 @@ jobs:
           path: release
 
   delivery:
-    name: Delivery to Azure Registry
     runs-on: ubuntu-latest
-    needs: [build_and_release_]
-    steps:      
+    needs: [build_and_release]
+
+    steps:        
       - uses: azure/docker-login@v1
         with:
           login-server: ${{ secrets.REGISTRY_SERVER }}
