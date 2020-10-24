@@ -4,6 +4,7 @@ import static org.hamcrest.Matchers.comparesEqualTo;
 import static org.hamcrest.Matchers.hasSize;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
@@ -12,6 +13,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fpineda.challenge.usersapi.core.command.CreateUserCommand;
 import com.fpineda.challenge.usersapi.core.usecase.CreateUserUseCase;
+import com.fpineda.challenge.usersapi.core.usecase.DeleteUserByIdUseCase;
 import com.fpineda.challenge.usersapi.core.usecase.FetchAllUsersUseCase;
 import com.fpineda.challenge.usersapi.core.usecase.FetchUserByIdUseCase;
 import com.fpineda.challenge.usersapi.infrastructure.adapter.web.controller.UserController;
@@ -51,13 +53,16 @@ class UserControllerTest {
     @MockBean
     private FetchUserByIdUseCase fetchUserUseCase;
 
+    @MockBean
+    private DeleteUserByIdUseCase deleteUserUseCase;
+
     @BeforeAll
     public static void setUp() {
         mapper = new ObjectMapper();
     }
 
     @Test
-    void should_CreateUser_Successfully() throws Exception {
+    void shouldCreateUser_Successfully() throws Exception {
         // Prepare data and mocks
         var createUserDto = TestUtilsFactory.createUserDto();
         var userExpected = TestUtilsFactory.createUser();
@@ -72,7 +77,7 @@ class UserControllerTest {
     }
 
     @Test
-    void should_Return_List_With_OneUser() throws Exception {
+    void shouldReturn_List_With_OneUser() throws Exception {
         // Prepare data
         var userList = TestUtilsFactory.createListUsers();
 
@@ -85,7 +90,7 @@ class UserControllerTest {
     }
 
     @Test
-    void should_Return_UserById_Sucessfully() throws Exception {
+    void shouldReturn_UserById_Sucessfully() throws Exception {
         // Prepare data
         var user = TestUtilsFactory.createUser();
 
@@ -94,6 +99,14 @@ class UserControllerTest {
         // Execution and assertions
         mockMvc.perform(get(BASE_PATH + "/" + 1L)).andExpect(status().isOk())
                 .andExpect(jsonPath("$.name", comparesEqualTo(user.getName())));
+    }
+
+    @Test
+    void shouldDelete_UserById_Successfully() throws Exception {
+        long id = 1L;
+        //Assertions
+        mockMvc.perform(delete(BASE_PATH + "/" + id)).andExpect(status().isNoContent());
+        
     }
 
 

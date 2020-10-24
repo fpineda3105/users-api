@@ -1,7 +1,9 @@
 FROM maven:3.6.3-openjdk-11-slim AS build
-RUN mkdir -p /workspace
+#RUN mkdir -p /workspace
 WORKDIR /workspace
-COPY pom.xml /workspace
+COPY pom.xml .
+RUN mvn dependency:go-offline
+
 COPY src /workspace/src
 COPY entrypoint.sh /workspace
 RUN mvn -B package --file pom.xml -DskipTests
