@@ -45,12 +45,15 @@ class DeleteUserByIdUseCaseTest {
         var entityCreated = databaseConfig.persistUserForTesting();
 
         // Execute
-        Assertions.assertDoesNotThrow(() -> {
-            deleteUserUseCase.deleteById(entityCreated.getId());
-        });
+        deleteUserUseCase.deleteById(entityCreated.getId());
 
-        Assertions.assertThrows(EntityNotFoundException.class,
-                () -> fetchUserUseCase.fetchById(entityCreated.getId()));
+        // Assert Fail Fetching after Deleting
+        try {
+            fetchUserUseCase.fetchById(entityCreated.getId());
+            Assertions.fail();
+        } catch (EntityNotFoundException e) {
+            
+        }
     }
 
     @Test
@@ -58,8 +61,12 @@ class DeleteUserByIdUseCaseTest {
         // Prepare data
 
         // Execution & Assertion
-        Assertions.assertThrows(EntityNotFoundException.class,
-                () -> deleteUserUseCase.deleteById(100L));
+        try {
+            deleteUserUseCase.deleteById(100L);
+            Assertions.fail();
+        } catch (EntityNotFoundException e) {
+            
+        }
     }
 
 }
