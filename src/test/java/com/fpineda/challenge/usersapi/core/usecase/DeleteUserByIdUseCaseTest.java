@@ -47,13 +47,8 @@ class DeleteUserByIdUseCaseTest {
         // Execute
         deleteUserUseCase.deleteById(entityCreated.getId());
 
-        // Assert Fail Fetching after Deleting
-        try {
-            fetchUserUseCase.fetchById(entityCreated.getId());
-            Assertions.fail();
-        } catch (EntityNotFoundException e) {
-            
-        }
+        Assertions.assertThrows(EntityNotFoundException.class,
+                () -> fetchUserUseCase.fetchById(entityCreated.getId()));
     }
 
     @Test
@@ -61,12 +56,8 @@ class DeleteUserByIdUseCaseTest {
         // Prepare data
 
         // Execution & Assertion
-        try {
-            deleteUserUseCase.deleteById(100L);
-            Assertions.fail();
-        } catch (EntityNotFoundException e) {
-            
-        }
+        Assertions.assertThrows(EntityNotFoundException.class,
+                () -> deleteUserUseCase.deleteById(100L));
     }
 
 }
