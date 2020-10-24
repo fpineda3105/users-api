@@ -40,30 +40,27 @@ class DeleteUserByIdUseCaseTest {
     }
 
     @Test
-    void shouldDelete_User_Successfully(){
+    void shouldDelete_User_Successfully() {
         // Prepare data
         var entityCreated = databaseConfig.persistUserForTesting();
 
-        //Execute
-        Assertions.assertDoesNotThrow(()-> {
+        // Execute
+        Assertions.assertDoesNotThrow(() -> {
             deleteUserUseCase.deleteById(entityCreated.getId());
         });
 
-        Assertions.assertThrows(EntityNotFoundException.class, ()-> {
+        Assertions.assertThrows(EntityNotFoundException.class, () -> {
             fetchUserUseCase.fetchById(entityCreated.getId());
         });
     }
-
 
     @Test
     void shouldThrow_Exception_NotFound() {
         // Prepare data
 
         // Execution & Assertion
-        Assertions.assertThrows(EntityNotFoundException.class, () -> {
-            deleteUserUseCase.deleteById(100L);
-        });
-
+        Assertions.assertThrows(EntityNotFoundException.class,
+                () -> deleteUserUseCase.deleteById(100L));
     }
 
 }

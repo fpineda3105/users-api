@@ -43,7 +43,7 @@ public class AppConfig {
     }
 
     @Bean
-    public DeleteUserByIdUseCase DeleteUserByIdUseCase(){
+    public DeleteUserByIdUseCase deleteUserByIdUseCase(){
         return new DeleteUserApi(databaseConfig.userRepositoryAdapter());
     }
 
