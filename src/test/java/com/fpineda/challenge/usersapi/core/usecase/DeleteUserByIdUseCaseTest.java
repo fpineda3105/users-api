@@ -49,9 +49,8 @@ class DeleteUserByIdUseCaseTest {
             deleteUserUseCase.deleteById(entityCreated.getId());
         });
 
-        Assertions.assertThrows(EntityNotFoundException.class, () -> {
-            fetchUserUseCase.fetchById(entityCreated.getId());
-        });
+        Assertions.assertThrows(EntityNotFoundException.class,
+                () -> fetchUserUseCase.fetchById(entityCreated.getId()));
     }
 
     @Test
