@@ -4,10 +4,12 @@ import com.fpineda.challenge.usersapi.api.CreateUserApi;
 import com.fpineda.challenge.usersapi.api.DeleteUserApi;
 import com.fpineda.challenge.usersapi.api.FetchAllUsersApi;
 import com.fpineda.challenge.usersapi.api.FetchUserByIdApi;
+import com.fpineda.challenge.usersapi.api.UpdateUserApi;
 import com.fpineda.challenge.usersapi.core.usecase.CreateUserUseCase;
 import com.fpineda.challenge.usersapi.core.usecase.DeleteUserByIdUseCase;
 import com.fpineda.challenge.usersapi.core.usecase.FetchAllUsersUseCase;
 import com.fpineda.challenge.usersapi.core.usecase.FetchUserByIdUseCase;
+import com.fpineda.challenge.usersapi.core.usecase.UpdateUserUseCase;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
@@ -45,6 +47,11 @@ public class AppConfig {
     @Bean
     public DeleteUserByIdUseCase deleteUserByIdUseCase(){
         return new DeleteUserApi(databaseConfig.userRepositoryAdapter());
+    }
+
+    @Bean
+    public UpdateUserUseCase updateUserUseCase() {
+        return new UpdateUserApi(databaseConfig.userRepositoryAdapter());
     }
 
     @Bean
