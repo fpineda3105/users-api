@@ -44,8 +44,7 @@ public class UserController {
         var result = createUserUseCase.create(request.toCommand());
         URI location =
                 fromCurrentContextPath().path("users/{id}").buildAndExpand(result.getId()).toUri();
-        return ResponseEntity.created(location).build();
-        // return ResponseEntity.ok().body(createUserUseCase.create(request.toCommand()));
+        return ResponseEntity.created(location).build();        
     }
 
     @GetMapping
@@ -70,8 +69,10 @@ public class UserController {
     @PutMapping(value = "/{id}")
     @ApiOperation(value = "Update User by Id", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<User> updateUser(@PathVariable("id") long id,
-            @RequestBody UpdateUserDto entity) {
-        var command = entity.toCommand();
+            @RequestBody UpdateUserDto updateRequest) {
+        updateRequest.setId(id);
+        var command = updateRequest.toCommand();
+        
         return ResponseEntity.ok(updateUserUseCase.updateUser(command));
     }
 

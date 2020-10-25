@@ -103,6 +103,34 @@
 						}
 					},
 					"response": []
+				},
+				{
+					"name": "Update User",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"name\" : \"Fernando Updated\",\r\n    \"email\" : \"fpineda@dev.com\",\r\n    \"birthDate\" : \"1988-05-31\",\r\n    \"address\": {\r\n        \"street\" : \"Calle Blas Pascal\",\r\n        \"state\" : \"Lima\",\r\n        \"city\": \"Lima\",\r\n        \"country\" : \"Peru\",\r\n        \"zip\": \"15378\"\r\n    }\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost/users/1",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"path": [
+								"users",
+								"1"
+							]
+						}
+					},
+					"response": []
 				}
 			],
 			"protocolProfileBehavior": {}
@@ -185,6 +213,36 @@
 					"request": {
 						"method": "DELETE",
 						"header": [],
+						"url": {
+							"raw": "https://usersapichallenge.azurewebsites.net/users/1",
+							"protocol": "https",
+							"host": [
+								"usersapichallenge",
+								"azurewebsites",
+								"net"
+							],
+							"path": [
+								"users",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update User",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"name\" : \"Fernando Updated\",\r\n    \"email\" : \"fpineda@dev.com\",\r\n    \"birthDate\" : \"1988-05-31\",\r\n    \"address\": {\r\n        \"street\" : \"Calle Blas Pascal\",\r\n        \"state\" : \"Lima\",\r\n        \"city\": \"Lima\",\r\n        \"country\" : \"Peru\",\r\n        \"zip\": \"15378\"\r\n    }\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
 						"url": {
 							"raw": "https://usersapichallenge.azurewebsites.net/users/1",
 							"protocol": "https",
