@@ -52,19 +52,7 @@ class UserControllerNonRestTest {
     private static ObjectMapper mapper;
 
     @MockBean
-    private CreateUserUseCase createUserUseCase;
-
-    @MockBean
-    private FetchAllUsersUseCase fetchAllUsersUseCase;
-
-    @MockBean
-    private FetchUserByIdUseCase fetchUserUseCase;
-
-    @MockBean
-    private DeleteUserByIdUseCase deleteUserUseCase;
-
-    @MockBean
-    private UpdateUserUseCase updateUserUseCase;
+    private CreateUserUseCase createUserUseCase;        
 
     @MockBean
     private UserController restController;
