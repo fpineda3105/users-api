@@ -162,8 +162,6 @@ class UserControllerTest {
         
         var userExpected = TestUtilsFactory.createUser();
         userExpected.setName(newName);
-        
-        
 
         when(updateUserUseCase.updateUser(any(UpdateUserCommand.class))).thenReturn(userExpected);
 

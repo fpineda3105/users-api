@@ -11,6 +11,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import java.util.List;
 import javax.persistence.EntityNotFoundException;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -92,7 +93,9 @@ class UserControllerNonRestTest {
         // Prepare data
         var userList = TestUtilsFactory.createListUsers();
 
-        when(fetchAllUsersUseCase.fetchAll()).thenReturn(userList);
+        ResponseEntity<List<User>> result = ResponseEntity.ok(userList);
+
+        when(restController.fetchAllUsers()).thenReturn(result);
 
         // Execution and Assertions
         mockMvc.perform(get("/getusers")).andExpect(status().isOk())
@@ -105,7 +108,9 @@ class UserControllerNonRestTest {
         // Prepare data
         var user = TestUtilsFactory.createUser();
 
-        when(fetchUserUseCase.fetchById(1L)).thenReturn(user);
+        ResponseEntity<User> result = ResponseEntity.ok(user);
+
+        when(restController.fetchUserById(1L)).thenReturn(result);
 
         // Execution and assertions
         mockMvc.perform(get("/getusersById" + "/" + 1L)).andExpect(status().isOk())
@@ -115,7 +120,7 @@ class UserControllerNonRestTest {
     @Test
     void shouldReturn_StatusNotFound() throws Exception {
         // Prepare Data
-        when(fetchUserUseCase.fetchById(anyLong())).thenThrow(new EntityNotFoundException());
+        when(restController.fetchUserById(anyLong())).thenThrow(new EntityNotFoundException());
 
         // Execution and Assertion
         mockMvc.perform(get("/getusersById" + "/" + 1L)).andExpect(status().isNotFound());
