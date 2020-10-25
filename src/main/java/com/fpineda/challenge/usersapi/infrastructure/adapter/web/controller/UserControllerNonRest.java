@@ -34,6 +34,7 @@ public class UserControllerNonRest {
     private final FetchUserByIdUseCase fetchUserUseCase;
     private final DeleteUserByIdUseCase deleteUserUseCase;
     private final UpdateUserUseCase updateUserUseCase;
+    private final UserController restController;
 
     @ApiOperation(value = "Create an User", code = 201)
     @PostMapping("/createUsers")
@@ -67,10 +68,7 @@ public class UserControllerNonRest {
     @ApiOperation(value = "Update User by Id", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<User> updateUser(@PathVariable("id") long id,
             @RequestBody UpdateUserDto updateRequest) {
-        updateRequest.setId(id);
-        var command = updateRequest.toCommand();
-        
-        return ResponseEntity.ok(updateUserUseCase.updateUser(command));
+        return restController.updateUser(id, updateRequest);
     }
     
 }
