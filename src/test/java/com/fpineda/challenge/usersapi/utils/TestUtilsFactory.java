@@ -9,7 +9,7 @@ import com.fpineda.challenge.usersapi.core.model.User;
 import com.fpineda.challenge.usersapi.infrastructure.adapter.persistence.entity.UserEntity;
 import com.fpineda.challenge.usersapi.infrastructure.adapter.persistence.repository.UserEntityMapper;
 import com.fpineda.challenge.usersapi.infrastructure.adapter.web.dto.CreateUserDto;
-import com.fpineda.challenge.usersapi.infrastructure.adapter.web.dto.CreateUserDto.AddressDto;
+import com.fpineda.challenge.usersapi.infrastructure.adapter.web.dto.AddressDto;
 
 public class TestUtilsFactory {
 

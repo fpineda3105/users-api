@@ -4,15 +4,17 @@ import java.util.List;
 import java.util.stream.Collectors;
 import javax.persistence.EntityNotFoundException;
 import com.fpineda.challenge.usersapi.core.command.CreateUserCommand;
+import com.fpineda.challenge.usersapi.core.command.UpdateUserCommand;
 import com.fpineda.challenge.usersapi.core.model.User;
 import com.fpineda.challenge.usersapi.core.port.CreateUserPort;
 import com.fpineda.challenge.usersapi.core.port.DeleteUserByIdPort;
 import com.fpineda.challenge.usersapi.core.port.FetchAllUserPort;
 import com.fpineda.challenge.usersapi.core.port.FetchUserByIdPort;
+import com.fpineda.challenge.usersapi.core.port.UpdateUserPort;
 import com.fpineda.challenge.usersapi.infrastructure.adapter.persistence.entity.UserEntity;
-import org.springframework.dao.EmptyResultDataAccessException;
 
-public class UserRepositoryAdapter implements CreateUserPort, FetchAllUserPort, FetchUserByIdPort, DeleteUserByIdPort {
+public class UserRepositoryAdapter implements CreateUserPort, FetchAllUserPort, FetchUserByIdPort,
+        DeleteUserByIdPort, UpdateUserPort {
 
     private final JpaUserRepository userRepository;
 
@@ -35,26 +37,40 @@ public class UserRepositoryAdapter implements CreateUserPort, FetchAllUserPort, 
 
     @Override
     public List<User> fetchAll() {
-        return userRepository.findAll().stream().map(mapper::toModel)
-                .collect(Collectors.toList());
+        return userRepository.findAll().stream().map(mapper::toModel).collect(Collectors.toList());
     }
 
     @Override
-    public User fetchById(long id) {        
+    public User fetchById(long id) {
         var result = userRepository.findById(id);
-        if (result.isPresent()){
-            return mapper.toModel(result.get()) ;
+        if (result.isPresent()) {
+            return mapper.toModel(result.get());
         }
         throw new EntityNotFoundException();
     }
 
     @Override
-    public void deleteById(long id) {   
-        try {
+    public void deleteById(long id) {
+        if (userRepository.existsById(id)) {
             userRepository.deleteById(id);
-        } catch (EmptyResultDataAccessException e) {
+        } else {
             throw new EntityNotFoundException();
-        }             
+        }
+    }
+
+    @Override
+    public User updateUser(final UpdateUserCommand command) {
+        if (userRepository.existsById(command.getId())) {
+            
+            var entity = mapper.toEntity(command.toUser());
+            entity.setId(command.getId());
+
+            var entityUpdated = userRepository.save(entity);
+            return mapper.toModel(entityUpdated);
+        }
+        else {
+            throw new EntityNotFoundException();
+        }
     }
 
 }
