@@ -8,6 +8,9 @@
 - Update Users
 - Delete Users
 
+## Clean Architecture
+This project was developed using [Clean Architecture](https://blog.cleancoder.com/uncle-bob/2012/08/13/the-clean-architecture.html) and [CQRS](https://martinfowler.com/bliki/CQRS.html)
+
 ## Set-Up
 ```
 mvn spring-boot:run
@@ -24,3 +27,5 @@ To test manually, import the postman collection
 ## Swagger
 The swagger documentation can be seen here
 https://usersapichallenge.azurewebsites.net/swagger-ui/
+
+Or local http://localhost/swagger-ui/

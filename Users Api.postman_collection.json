@@ -7,7 +7,7 @@
 	},
 	"item": [
 		{
-			"name": "Local",
+			"name": "Local Rest",
 			"item": [
 				{
 					"name": "Create User",
@@ -136,7 +136,7 @@
 			"protocolProfileBehavior": {}
 		},
 		{
-			"name": "cloud",
+			"name": "cloud Rest",
 			"item": [
 				{
 					"name": "Fetch All Users",
@@ -254,6 +254,274 @@
 							"path": [
 								"users",
 								"1"
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"protocolProfileBehavior": {}
+		},
+		{
+			"name": "NonRest Local",
+			"item": [
+				{
+					"name": "Get All Users",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost/getusers",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"path": [
+								"getusers"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete User",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "http://localhost/deleteUsersById/1",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"path": [
+								"deleteUsersById",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update User",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"name\" : \"Fernando Updated\",\r\n    \"email\" : \"fpineda@dev.com\",\r\n    \"birthDate\" : \"1988-05-31\",\r\n    \"address\": {\r\n        \"street\" : \"Calle Blas Pascal\",\r\n        \"state\" : \"Lima\",\r\n        \"city\": \"Lima\",\r\n        \"country\" : \"Peru\",\r\n        \"zip\": \"15378\"\r\n    }\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost/updateUsersById/1",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"path": [
+								"updateUsersById",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create User",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"name\" : \"Fernando\",\r\n    \"email\" : \"fpineda@dev.com\",\r\n    \"birthDate\" : \"1988-05-31\",\r\n    \"address\": {\r\n        \"street\" : \"Calle Blas Pascal\",\r\n        \"state\" : \"Lima\",\r\n        \"city\": \"Lima\",\r\n        \"country\" : \"Peru\",\r\n        \"zip\": \"15378\"\r\n    }\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost/createUsers",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"path": [
+								"createUsers"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Fetch User by ID",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost/getusersById/2",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"path": [
+								"getusersById",
+								"2"
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"protocolProfileBehavior": {}
+		},
+		{
+			"name": "NonRest Cloud",
+			"item": [
+				{
+					"name": "Get All Users",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://usersapichallenge.azurewebsites.net/getusers",
+							"protocol": "https",
+							"host": [
+								"usersapichallenge",
+								"azurewebsites",
+								"net"
+							],
+							"path": [
+								"getusers"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete User",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "https://usersapichallenge.azurewebsites.net/deleteUsersById/1",
+							"protocol": "https",
+							"host": [
+								"usersapichallenge",
+								"azurewebsites",
+								"net"
+							],
+							"path": [
+								"deleteUsersById",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update User",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"name\" : \"Fernando Updated\",\r\n    \"email\" : \"fpineda@dev.com\",\r\n    \"birthDate\" : \"1988-05-31\",\r\n    \"address\": {\r\n        \"street\" : \"Calle Blas Pascal\",\r\n        \"state\" : \"Lima\",\r\n        \"city\": \"Lima\",\r\n        \"country\" : \"Peru\",\r\n        \"zip\": \"15378\"\r\n    }\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://usersapichallenge.azurewebsites.net/updateUsersById/1",
+							"protocol": "https",
+							"host": [
+								"usersapichallenge",
+								"azurewebsites",
+								"net"
+							],
+							"path": [
+								"updateUsersById",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create User",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"name\" : \"Fernando\",\r\n    \"email\" : \"fpineda@dev.com\",\r\n    \"birthDate\" : \"1988-05-31\",\r\n    \"address\": {\r\n        \"street\" : \"Calle Blas Pascal\",\r\n        \"state\" : \"Lima\",\r\n        \"city\": \"Lima\",\r\n        \"country\" : \"Peru\",\r\n        \"zip\": \"15378\"\r\n    }\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://usersapichallenge.azurewebsites.net/createUsers",
+							"protocol": "https",
+							"host": [
+								"usersapichallenge",
+								"azurewebsites",
+								"net"
+							],
+							"path": [
+								"createUsers"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Fetch User by ID",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "https://usersapichallenge.azurewebsites.net/getusersById/2",
+							"protocol": "https",
+							"host": [
+								"usersapichallenge",
+								"azurewebsites",
+								"net"
+							],
+							"path": [
+								"getusersById",
+								"2"
 							]
 						}
 					},

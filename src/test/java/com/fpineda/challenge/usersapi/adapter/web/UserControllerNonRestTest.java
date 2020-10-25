@@ -11,19 +11,17 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import java.util.List;
 import javax.persistence.EntityNotFoundException;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fpineda.challenge.usersapi.core.command.CreateUserCommand;
-import com.fpineda.challenge.usersapi.core.command.UpdateUserCommand;
+import com.fpineda.challenge.usersapi.core.model.User;
 import com.fpineda.challenge.usersapi.core.usecase.CreateUserUseCase;
-import com.fpineda.challenge.usersapi.core.usecase.DeleteUserByIdUseCase;
-import com.fpineda.challenge.usersapi.core.usecase.FetchAllUsersUseCase;
-import com.fpineda.challenge.usersapi.core.usecase.FetchUserByIdUseCase;
-import com.fpineda.challenge.usersapi.core.usecase.UpdateUserUseCase;
 import com.fpineda.challenge.usersapi.infrastructure.adapter.web.controller.UserController;
+import com.fpineda.challenge.usersapi.infrastructure.adapter.web.controller.UserControllerNonRest;
+import com.fpineda.challenge.usersapi.infrastructure.adapter.web.dto.UpdateUserDto;
 import com.fpineda.challenge.usersapi.utils.TestUtilsFactory;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,12 +30,11 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.test.web.servlet.MockMvc;
 
-@WebMvcTest(value = UserController.class)
-class UserControllerTest {
-
-    private static final String BASE_PATH = "/users";
+@WebMvcTest(value = UserControllerNonRest.class)
+class UserControllerNonRestTest {
 
     @Configuration
     @ComponentScan(basePackages = "com.fpineda.challenge.usersapi.infrastructure.adapter.web")
@@ -51,19 +48,10 @@ class UserControllerTest {
     private static ObjectMapper mapper;
 
     @MockBean
-    private CreateUserUseCase createUserUseCase;
+    private CreateUserUseCase createUserUseCase;        
 
     @MockBean
-    private FetchAllUsersUseCase fetchAllUsersUseCase;
-
-    @MockBean
-    private FetchUserByIdUseCase fetchUserUseCase;
-
-    @MockBean
-    private DeleteUserByIdUseCase deleteUserUseCase;
-
-    @MockBean
-    private UpdateUserUseCase updateUserUseCase;
+    private UserController restController;
 
     @BeforeAll
     public static void setUp() {
@@ -75,16 +63,13 @@ class UserControllerTest {
         // Prepare data and mocks
         var createUserDto = TestUtilsFactory.createUserDto();
         var userExpected = TestUtilsFactory.createUser();
-        var locationExpected = "/users/" + userExpected.getId();
 
         when(createUserUseCase.create(any(CreateUserCommand.class))).thenReturn(userExpected);
 
         // Execute and Assertions
-        var mvcResult = mockMvc.perform(post(BASE_PATH).contentType(MediaType.APPLICATION_JSON)
-        .content(asJsonString(createUserDto))).andReturn();
-
-        var headerLocation = mvcResult.getResponse().getHeader("Location");
-        Assertions.assertTrue(headerLocation.contains(locationExpected));
+        mockMvc.perform(post("/createUsers").contentType(MediaType.APPLICATION_JSON)
+                .content(asJsonString(createUserDto))).andExpect(status().isCreated())
+                .andExpect(jsonPath("$.name", comparesEqualTo(userExpected.getName())));
     }
 
     @Test
@@ -92,10 +77,12 @@ class UserControllerTest {
         // Prepare data
         var userList = TestUtilsFactory.createListUsers();
 
-        when(fetchAllUsersUseCase.fetchAll()).thenReturn(userList);
+        ResponseEntity<List<User>> result = ResponseEntity.ok(userList);
+
+        when(restController.fetchAllUsers()).thenReturn(result);
 
         // Execution and Assertions
-        mockMvc.perform(get(BASE_PATH)).andExpect(status().isOk())
+        mockMvc.perform(get("/getusers")).andExpect(status().isOk())
                 .andExpect(jsonPath("$", hasSize(1)));
 
     }
@@ -105,52 +92,22 @@ class UserControllerTest {
         // Prepare data
         var user = TestUtilsFactory.createUser();
 
-        when(fetchUserUseCase.fetchById(1L)).thenReturn(user);
+        ResponseEntity<User> result = ResponseEntity.ok(user);
+
+        when(restController.fetchUserById(1L)).thenReturn(result);
 
         // Execution and assertions
-        mockMvc.perform(get(BASE_PATH + "/" + 1L)).andExpect(status().isOk())
+        mockMvc.perform(get("/getusersById" + "/" + 1L)).andExpect(status().isOk())
                 .andExpect(jsonPath("$.name", comparesEqualTo(user.getName())));
     }
 
     @Test
     void shouldReturn_StatusNotFound() throws Exception {
         // Prepare Data
-        when(fetchUserUseCase.fetchById(anyLong())).thenThrow(new EntityNotFoundException());
+        when(restController.fetchUserById(anyLong())).thenThrow(new EntityNotFoundException());
 
-        //Execution and Assertion
-        mockMvc.perform(get(BASE_PATH + "/" + 1L)).andExpect(status().isNotFound());
-    }
-
-    @Test
-    void shouldDelete_UserById_Successfully() throws Exception {
-        long id = 1L;
-        //Assertions
-        mockMvc.perform(delete(BASE_PATH + "/" + id)).andExpect(status().isNoContent());
-        
-    }
-
-    @Test
-    void shouldReturn_StatusBadRequest_CreatingUserByName() throws Exception {
-        // Prepare data and mocks
-        var createUserDto = TestUtilsFactory.createUserDto();
-                
-        createUserDto.setName("234234");
-
-        // Execute and Assertions
-        mockMvc.perform(post(BASE_PATH).contentType(MediaType.APPLICATION_JSON)
-        .content(asJsonString(createUserDto))).andExpect(status().isBadRequest());    
-    }
-    
-    @Test
-    void shouldReturn_StatusBadRequest_CreatingUserByEmail() throws Exception {
-        // Prepare data and mocks
-        var createUserDto = TestUtilsFactory.createUserDto();
-                
-        createUserDto.setEmail("adkjgsakj214");
-
-        // Execute and Assertions
-        mockMvc.perform(post(BASE_PATH).contentType(MediaType.APPLICATION_JSON)
-        .content(asJsonString(createUserDto))).andExpect(status().isBadRequest());    
+        // Execution and Assertion
+        mockMvc.perform(get("/getusersById" + "/" + 1L)).andExpect(status().isNotFound());
     }
 
     @Test
@@ -163,12 +120,22 @@ class UserControllerTest {
         var userExpected = TestUtilsFactory.createUser();
         userExpected.setName(newName);
 
-        when(updateUserUseCase.updateUser(any(UpdateUserCommand.class))).thenReturn(userExpected);
+        ResponseEntity<User> response = ResponseEntity.ok(userExpected);
+
+        when(restController.updateUser(anyLong(), any(UpdateUserDto.class))).thenReturn(response);
 
         // Execute and Assertions
-        mockMvc.perform(put("/users/" + 1L).contentType(MediaType.APPLICATION_JSON)
+        mockMvc.perform(put("/updateUsersById/" + 1L).contentType(MediaType.APPLICATION_JSON)
                 .content(asJsonString(updateUserDto))).andExpect(status().isOk())
                 .andExpect(jsonPath("$.name", comparesEqualTo(userExpected.getName())));
+    }
+
+    @Test
+    void shouldDelete_UserById_Successfully() throws Exception {
+        long id = 1L;
+        // Assertions
+        mockMvc.perform(delete("/deleteUsersById" + "/" + id)).andExpect(status().isOk());
+
     }
 
 

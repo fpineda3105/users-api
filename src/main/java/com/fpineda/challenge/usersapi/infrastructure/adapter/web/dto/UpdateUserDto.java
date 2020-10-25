@@ -1,6 +1,8 @@
 package com.fpineda.challenge.usersapi.infrastructure.adapter.web.dto;
 
 import java.time.LocalDate;
+import javax.validation.constraints.Email;
+import javax.validation.constraints.Pattern;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
@@ -21,8 +23,10 @@ public class UpdateUserDto {
 
     private long id;
 
+    @Pattern(regexp = "[a-zA-z ]+")
     private String name;
 
+    @Email
     private String email;
 
     @JsonSerialize(using = ToStringSerializer.class)

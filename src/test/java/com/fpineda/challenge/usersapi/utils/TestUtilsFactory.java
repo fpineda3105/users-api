@@ -9,6 +9,7 @@ import com.fpineda.challenge.usersapi.core.model.User;
 import com.fpineda.challenge.usersapi.infrastructure.adapter.persistence.entity.UserEntity;
 import com.fpineda.challenge.usersapi.infrastructure.adapter.persistence.repository.UserEntityMapper;
 import com.fpineda.challenge.usersapi.infrastructure.adapter.web.dto.CreateUserDto;
+import com.fpineda.challenge.usersapi.infrastructure.adapter.web.dto.UpdateUserDto;
 import com.fpineda.challenge.usersapi.infrastructure.adapter.web.dto.AddressDto;
 
 public class TestUtilsFactory {
@@ -57,6 +58,11 @@ public class TestUtilsFactory {
         var result = new ArrayList<User>();
         result.add(user);
         return result;
+    }
+
+    public static UpdateUserDto createUpdateUserDto() {
+        return UpdateUserDto.builder().id(1L).name("Fernando").email("fpineda@gmail.com")
+        .birthDate(LocalDate.of(1988, 05, 31)).address(createAddressDto()).build();
     }
 
 }

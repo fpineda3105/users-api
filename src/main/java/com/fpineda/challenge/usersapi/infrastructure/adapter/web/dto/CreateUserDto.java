@@ -1,6 +1,8 @@
 package com.fpineda.challenge.usersapi.infrastructure.adapter.web.dto;
 
 import java.time.LocalDate;
+import javax.validation.constraints.Email;
+import javax.validation.constraints.Pattern;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
@@ -9,20 +11,24 @@ import com.fpineda.challenge.usersapi.core.command.CreateUserCommand;
 import lombok.Builder;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
+import lombok.Setter;
 import lombok.ToString;
 
-@Builder
 @Getter
+@Setter
+@Builder
 @EqualsAndHashCode
 @ToString
 public class CreateUserDto {
 
+    @Pattern(regexp = "[a-zA-z ]+", message = "invalid name")
     private String name;
 
+    @Email
     private String email;
 
     @JsonSerialize(using = ToStringSerializer.class)
-    @JsonDeserialize(using = LocalDateDeserializer.class)
+    @JsonDeserialize(using = LocalDateDeserializer.class)    
     private LocalDate birthDate;
 
     private AddressDto address;

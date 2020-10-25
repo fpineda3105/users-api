@@ -3,6 +3,7 @@ package com.fpineda.challenge.usersapi.infrastructure.adapter.web.controller;
 import static org.springframework.web.servlet.support.ServletUriComponentsBuilder.fromCurrentContextPath;
 import java.net.URI;
 import java.util.List;
+import javax.validation.Valid;
 import com.fpineda.challenge.usersapi.core.model.User;
 import com.fpineda.challenge.usersapi.core.usecase.CreateUserUseCase;
 import com.fpineda.challenge.usersapi.core.usecase.DeleteUserByIdUseCase;
@@ -40,11 +41,11 @@ public class UserController {
 
     @ApiOperation(value = "Create an User", code = 201)
     @PostMapping
-    public ResponseEntity<Void> createUser(@RequestBody CreateUserDto request) {
+    public ResponseEntity<Void> createUser(@Valid @RequestBody CreateUserDto request) {
         var result = createUserUseCase.create(request.toCommand());
         URI location =
                 fromCurrentContextPath().path("users/{id}").buildAndExpand(result.getId()).toUri();
-        return ResponseEntity.created(location).build();        
+        return ResponseEntity.created(location).build();
     }
 
     @GetMapping
@@ -69,10 +70,10 @@ public class UserController {
     @PutMapping(value = "/{id}")
     @ApiOperation(value = "Update User by Id", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<User> updateUser(@PathVariable("id") long id,
-            @RequestBody UpdateUserDto updateRequest) {
+            @Valid @RequestBody UpdateUserDto updateRequest) {
         updateRequest.setId(id);
         var command = updateRequest.toCommand();
-        
+
         return ResponseEntity.ok(updateUserUseCase.updateUser(command));
     }
 
