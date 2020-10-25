@@ -19,4 +19,8 @@ mvn verify
 ```
 
 ## Manual Testing
-To test manually, use postman collection
+To test manually, import the postman collection
+
+## Swagger
+The swagger documentation can be seen here
+https://usersapichallenge.azurewebsites.net/swagger-ui/
