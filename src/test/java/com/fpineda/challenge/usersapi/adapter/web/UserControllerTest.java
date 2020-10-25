@@ -8,12 +8,14 @@ import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import javax.persistence.EntityNotFoundException;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fpineda.challenge.usersapi.core.command.CreateUserCommand;
+import com.fpineda.challenge.usersapi.core.command.UpdateUserCommand;
 import com.fpineda.challenge.usersapi.core.usecase.CreateUserUseCase;
 import com.fpineda.challenge.usersapi.core.usecase.DeleteUserByIdUseCase;
 import com.fpineda.challenge.usersapi.core.usecase.FetchAllUsersUseCase;
@@ -125,6 +127,50 @@ class UserControllerTest {
         //Assertions
         mockMvc.perform(delete(BASE_PATH + "/" + id)).andExpect(status().isNoContent());
         
+    }
+
+    @Test
+    void shouldReturn_StatusBadRequest_CreatingUserByName() throws Exception {
+        // Prepare data and mocks
+        var createUserDto = TestUtilsFactory.createUserDto();
+                
+        createUserDto.setName("234234");
+
+        // Execute and Assertions
+        mockMvc.perform(post(BASE_PATH).contentType(MediaType.APPLICATION_JSON)
+        .content(asJsonString(createUserDto))).andExpect(status().isBadRequest());    
+    }
+    
+    @Test
+    void shouldReturn_StatusBadRequest_CreatingUserByEmail() throws Exception {
+        // Prepare data and mocks
+        var createUserDto = TestUtilsFactory.createUserDto();
+                
+        createUserDto.setEmail("adkjgsakj214");
+
+        // Execute and Assertions
+        mockMvc.perform(post(BASE_PATH).contentType(MediaType.APPLICATION_JSON)
+        .content(asJsonString(createUserDto))).andExpect(status().isBadRequest());    
+    }
+
+    @Test
+    void shouldUpdateUser_Successfully() throws Exception {
+        // Prepare data and mocks
+        var newName = "Fernando updated";
+        var updateUserDto = TestUtilsFactory.createUpdateUserDto();
+        updateUserDto.setName(newName);
+        
+        var userExpected = TestUtilsFactory.createUser();
+        userExpected.setName(newName);
+        
+        
+
+        when(updateUserUseCase.updateUser(any(UpdateUserCommand.class))).thenReturn(userExpected);
+
+        // Execute and Assertions
+        mockMvc.perform(put("/users/" + 1L).contentType(MediaType.APPLICATION_JSON)
+                .content(asJsonString(updateUserDto))).andExpect(status().isOk())
+                .andExpect(jsonPath("$.name", comparesEqualTo(userExpected.getName())));
     }
 
 

@@ -32,8 +32,7 @@ public class UserControllerNonRest {
     private final CreateUserUseCase createUserUseCase;
     private final FetchAllUsersUseCase fetchAllUsersUseCase;
     private final FetchUserByIdUseCase fetchUserUseCase;
-    private final DeleteUserByIdUseCase deleteUserUseCase;
-    private final UpdateUserUseCase updateUserUseCase;
+    private final DeleteUserByIdUseCase deleteUserUseCase;    
     private final UserController restController;
 
     @ApiOperation(value = "Create an User", code = 201)

@@ -11,9 +11,11 @@ import com.fpineda.challenge.usersapi.core.command.CreateUserCommand;
 import lombok.Builder;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
+import lombok.Setter;
 import lombok.ToString;
 
 @Getter
+@Setter
 @Builder
 @EqualsAndHashCode
 @ToString
