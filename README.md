@@ -12,11 +12,13 @@
 This project was developed using [Clean Architecture](https://blog.cleancoder.com/uncle-bob/2012/08/13/the-clean-architecture.html) and [CQRS](https://martinfowler.com/bliki/CQRS.html)
 
 ## Set-Up
+
 ```
 mvn spring-boot:run
 ```
 
 ## Test and veriy code
+
 ```
 mvn verify
 ```
