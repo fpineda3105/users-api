@@ -17,7 +17,7 @@ This project was developed using [Clean Architecture](https://blog.cleancoder.co
 mvn spring-boot:run
 ```
 
-## Test and veriy code
+## Test and verify code
 
 ```
 mvn verify
